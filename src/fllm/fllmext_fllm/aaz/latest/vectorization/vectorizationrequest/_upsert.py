@@ -49,75 +49,82 @@ class Upsert(AAZCommand):
             options=["--name"],
             required=True,
         )
-
-        # define Arg Group "Body"
-
-        _args_schema = cls._args_schema
-        _args_schema.completed_steps = AAZListArg(
-            options=["--completed-steps"],
-            arg_group="Body",
-        )
-        _args_schema.content_identifier = AAZObjectArg(
-            options=["--content-identifier"],
-            arg_group="Body",
-        )
-        _args_schema.id = AAZStrArg(
-            options=["--id"],
-            arg_group="Body",
-        )
-        _args_schema.object_id = AAZStrArg(
-            options=["--object-id"],
-            arg_group="Body",
-        )
-        _args_schema.processing_type = AAZIntArg(
-            options=["--processing-type"],
-            arg_group="Body",
-            enum={"0": 0, "1": 1},
-        )
-        _args_schema.remaining_steps = AAZListArg(
-            options=["--remaining-steps"],
-            arg_group="Body",
-        )
-        _args_schema.steps = AAZListArg(
-            options=["--steps"],
-            arg_group="Body",
+        _args_schema.body = AAZObjectArg(
+            options=["--body"],
+            help="VectorizationRequest",
             blank={},
         )
 
-        completed_steps = cls._args_schema.completed_steps
-        completed_steps.Element = AAZStrArg()
+        body = cls._args_schema.body
+        body.item = AAZObjectArg(
+            options=["item"],
+        )
+        cls._build_args_vectorization_step_create(body.item)
+        body.completed_steps = AAZStrArg(
+            options=["completed-steps"],
+        )
+        body.content_identifier = AAZObjectArg(
+            options=["content-identifier"],
+            help="ContentIdentifier",
+        )
+        body.id = AAZStrArg(
+            options=["id"],
+        )
+        body.object_id = AAZStrArg(
+            options=["object-id"],
+        )
+        body.processing_type = AAZStrArg(
+            options=["processing-type"],
+            help="VectorizationProcessingType",
+            enum={"Asynchronous": "Asynchronous", "Synchronous": "Synchronous"},
+        )
+        body.remaining_steps = AAZStrArg(
+            options=["remaining-steps"],
+        )
+        body.steps = AAZListArg(
+            options=["steps"],
+        )
 
-        content_identifier = cls._args_schema.content_identifier
+        content_identifier = cls._args_schema.body.content_identifier
         content_identifier.canonical_id = AAZStrArg(
             options=["canonical-id"],
         )
         content_identifier.content_source_profile_name = AAZStrArg(
             options=["content-source-profile-name"],
         )
-        content_identifier.multipart_id = AAZListArg(
+        content_identifier.multipart_id = AAZStrArg(
             options=["multipart-id"],
         )
 
-        multipart_id = cls._args_schema.content_identifier.multipart_id
-        multipart_id.Element = AAZStrArg()
-
-        remaining_steps = cls._args_schema.remaining_steps
-        remaining_steps.Element = AAZStrArg()
-
-        steps = cls._args_schema.steps
+        steps = cls._args_schema.body.steps
         steps.Element = AAZObjectArg()
+        cls._build_args_vectorization_step_create(steps.Element)
+        return cls._args_schema
 
-        _element = cls._args_schema.steps.Element
-        _element.id = AAZStrArg(
+    _args_vectorization_step_create = None
+
+    @classmethod
+    def _build_args_vectorization_step_create(cls, _schema):
+        if cls._args_vectorization_step_create is not None:
+            _schema.id = cls._args_vectorization_step_create.id
+            _schema.parameters = cls._args_vectorization_step_create.parameters
+            return
+
+        cls._args_vectorization_step_create = AAZObjectArg()
+
+        vectorization_step_create = cls._args_vectorization_step_create
+        vectorization_step_create.id = AAZStrArg(
             options=["id"],
         )
-        _element.parameters = AAZDictArg(
+        vectorization_step_create.parameters = AAZDictArg(
             options=["parameters"],
         )
 
-        parameters = cls._args_schema.steps.Element.parameters
+        parameters = cls._args_vectorization_step_create.parameters
         parameters.Element = AAZStrArg()
-        return cls._args_schema
+
+        _schema.id = cls._args_vectorization_step_create.id
+        _schema.parameters = cls._args_vectorization_step_create.parameters
 
     def _execute_operations(self):
         self.pre_operations()
@@ -200,48 +207,28 @@ class Upsert(AAZCommand):
         @property
         def content(self):
             _content_value, _builder = self.new_content_builder(
-                self.ctx.args,
+                self.ctx.args.body,
                 typ=AAZObjectType,
                 typ_kwargs={"flags": {"client_flatten": True}}
             )
-            _builder.set_prop("completedSteps", AAZListType, ".completed_steps")
-            _builder.set_prop("contentIdentifier", AAZObjectType, ".content_identifier")
+            _UpsertHelper._build_schema_vectorization_step_create(_builder.set_prop("Item", AAZObjectType, ".item"))
+            _builder.set_prop("completed_steps", AAZStrType, ".completed_steps")
+            _builder.set_prop("content_identifier", AAZObjectType, ".content_identifier")
             _builder.set_prop("id", AAZStrType, ".id")
-            _builder.set_prop("objectId", AAZStrType, ".object_id")
-            _builder.set_prop("processingType", AAZIntType, ".processing_type")
-            _builder.set_prop("remainingSteps", AAZListType, ".remaining_steps")
+            _builder.set_prop("object_id", AAZStrType, ".object_id")
+            _builder.set_prop("processing_type", AAZStrType, ".processing_type")
+            _builder.set_prop("remaining_steps", AAZStrType, ".remaining_steps")
             _builder.set_prop("steps", AAZListType, ".steps")
 
-            completed_steps = _builder.get(".completedSteps")
-            if completed_steps is not None:
-                completed_steps.set_elements(AAZStrType, ".")
-
-            content_identifier = _builder.get(".contentIdentifier")
+            content_identifier = _builder.get(".content_identifier")
             if content_identifier is not None:
-                content_identifier.set_prop("canonicalId", AAZStrType, ".canonical_id")
-                content_identifier.set_prop("contentSourceProfileName", AAZStrType, ".content_source_profile_name")
-                content_identifier.set_prop("multipartId", AAZListType, ".multipart_id")
-
-            multipart_id = _builder.get(".contentIdentifier.multipartId")
-            if multipart_id is not None:
-                multipart_id.set_elements(AAZStrType, ".")
-
-            remaining_steps = _builder.get(".remainingSteps")
-            if remaining_steps is not None:
-                remaining_steps.set_elements(AAZStrType, ".")
+                content_identifier.set_prop("canonical_id", AAZStrType, ".canonical_id")
+                content_identifier.set_prop("content_source_profile_name", AAZStrType, ".content_source_profile_name")
+                content_identifier.set_prop("multipart_id", AAZStrType, ".multipart_id")
 
             steps = _builder.get(".steps")
             if steps is not None:
-                steps.set_elements(AAZObjectType, ".")
-
-            _elements = _builder.get(".steps[]")
-            if _elements is not None:
-                _elements.set_prop("id", AAZStrType, ".id")
-                _elements.set_prop("parameters", AAZDictType, ".parameters")
-
-            parameters = _builder.get(".steps[].parameters")
-            if parameters is not None:
-                parameters.set_elements(AAZStrType, ".")
+                _UpsertHelper._build_schema_vectorization_step_create(steps.set_elements(AAZObjectType, "."))
 
             return self.serialize_content(_content_value)
 
@@ -272,6 +259,17 @@ class Upsert(AAZCommand):
 
 class _UpsertHelper:
     """Helper class for Upsert"""
+
+    @classmethod
+    def _build_schema_vectorization_step_create(cls, _builder):
+        if _builder is None:
+            return
+        _builder.set_prop("id", AAZStrType, ".id")
+        _builder.set_prop("parameters", AAZDictType, ".parameters")
+
+        parameters = _builder.get(".parameters")
+        if parameters is not None:
+            parameters.set_elements(AAZStrType, ".")
 
 
 __all__ = ["Upsert"]

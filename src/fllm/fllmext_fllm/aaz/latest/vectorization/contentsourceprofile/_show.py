@@ -147,16 +147,10 @@ class Show(AAZCommand):
             _schema_on_200.Element = AAZObjectType()
 
             _element = cls._schema_on_200.Element
-            _element.configuration_references = AAZDictType(
-                serialized_name="configurationReferences",
-            )
-            _element.content_source = AAZIntType(
-                serialized_name="contentSource",
-            )
+            _element.configuration_references = AAZDictType()
+            _element.content_source = AAZStrType()
             _element.name = AAZStrType()
-            _element.object_id = AAZStrType(
-                serialized_name="objectId",
-            )
+            _element.object_id = AAZStrType()
             _element.settings = AAZDictType()
             _element.type = AAZStrType()
 

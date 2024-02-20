@@ -139,74 +139,53 @@ class List(AAZCommand):
             _schema_on_200.Element = AAZObjectType()
 
             _element = cls._schema_on_200.Element
-            _element.complete = AAZBoolType(
-                flags={"read_only": True},
+            _element.item = AAZObjectType(
+                serialized_name="Item",
             )
-            _element.completed_steps = AAZListType(
-                serialized_name="completedSteps",
-            )
-            _element.content_identifier = AAZObjectType(
-                serialized_name="contentIdentifier",
-            )
-            _element.current_step = AAZStrType(
-                serialized_name="currentStep",
-                flags={"read_only": True},
-            )
+            _ListHelper._build_schema_vectorization_step_read(_element.item)
+            _element.completed_steps = AAZStrType()
+            _element.content_identifier = AAZObjectType()
             _element.id = AAZStrType()
-            _element.object_id = AAZStrType(
-                serialized_name="objectId",
-            )
-            _element.processing_type = AAZIntType(
-                serialized_name="processingType",
-            )
-            _element.remaining_steps = AAZListType(
-                serialized_name="remainingSteps",
-            )
+            _element.object_id = AAZStrType()
+            _element.processing_type = AAZStrType()
+            _element.remaining_steps = AAZStrType()
             _element.steps = AAZListType()
 
-            completed_steps = cls._schema_on_200.Element.completed_steps
-            completed_steps.Element = AAZStrType()
-
             content_identifier = cls._schema_on_200.Element.content_identifier
-            content_identifier.canonical_id = AAZStrType(
-                serialized_name="canonicalId",
-            )
-            content_identifier.content_source_profile_name = AAZStrType(
-                serialized_name="contentSourceProfileName",
-            )
-            content_identifier.file_name = AAZStrType(
-                serialized_name="fileName",
-                flags={"read_only": True},
-            )
-            content_identifier.multipart_id = AAZListType(
-                serialized_name="multipartId",
-            )
-            content_identifier.unique_id = AAZStrType(
-                serialized_name="uniqueId",
-                flags={"read_only": True},
-            )
-
-            multipart_id = cls._schema_on_200.Element.content_identifier.multipart_id
-            multipart_id.Element = AAZStrType()
-
-            remaining_steps = cls._schema_on_200.Element.remaining_steps
-            remaining_steps.Element = AAZStrType()
+            content_identifier.canonical_id = AAZStrType()
+            content_identifier.content_source_profile_name = AAZStrType()
+            content_identifier.multipart_id = AAZStrType()
 
             steps = cls._schema_on_200.Element.steps
             steps.Element = AAZObjectType()
-
-            _element = cls._schema_on_200.Element.steps.Element
-            _element.id = AAZStrType()
-            _element.parameters = AAZDictType()
-
-            parameters = cls._schema_on_200.Element.steps.Element.parameters
-            parameters.Element = AAZStrType()
+            _ListHelper._build_schema_vectorization_step_read(steps.Element)
 
             return cls._schema_on_200
 
 
 class _ListHelper:
     """Helper class for List"""
+
+    _schema_vectorization_step_read = None
+
+    @classmethod
+    def _build_schema_vectorization_step_read(cls, _schema):
+        if cls._schema_vectorization_step_read is not None:
+            _schema.id = cls._schema_vectorization_step_read.id
+            _schema.parameters = cls._schema_vectorization_step_read.parameters
+            return
+
+        cls._schema_vectorization_step_read = _schema_vectorization_step_read = AAZObjectType()
+
+        vectorization_step_read = _schema_vectorization_step_read
+        vectorization_step_read.id = AAZStrType()
+        vectorization_step_read.parameters = AAZDictType()
+
+        parameters = _schema_vectorization_step_read.parameters
+        parameters.Element = AAZStrType()
+
+        _schema.id = cls._schema_vectorization_step_read.id
+        _schema.parameters = cls._schema_vectorization_step_read.parameters
 
 
 __all__ = ["List"]

@@ -111,7 +111,6 @@ class Upsert(AAZCommand):
         gatekeeper = cls._args_schema.body.gatekeeper
         gatekeeper.options = AAZListArg(
             options=["options"],
-            blank={},
         )
         gatekeeper.use_system_setting = AAZBoolArg(
             options=["use-system-setting"],
@@ -138,7 +137,6 @@ class Upsert(AAZCommand):
         )
         language_model.temperature = AAZFloatArg(
             options=["temperature"],
-            blank={},
         )
         language_model.type = AAZStrArg(
             options=["type"],

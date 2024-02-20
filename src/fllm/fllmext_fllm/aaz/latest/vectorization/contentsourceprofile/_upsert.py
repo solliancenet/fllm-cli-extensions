@@ -59,9 +59,10 @@ class Upsert(AAZCommand):
         body.configuration_references = AAZDictArg(
             options=["configuration-references"],
         )
-        body.content_source = AAZIntArg(
+        body.content_source = AAZStrArg(
             options=["content-source"],
-            enum={"0": 0, "1": 1, "2": 2},
+            help="ContentSourceType",
+            enum={"AzureDataLake": "AzureDataLake", "AzureSQLDatabase": "AzureSQLDatabase", "SharePointOnline": "SharePointOnline"},
         )
         body.name = AAZStrArg(
             options=["name"],
@@ -168,14 +169,14 @@ class Upsert(AAZCommand):
                 typ=AAZObjectType,
                 typ_kwargs={"flags": {"client_flatten": True}}
             )
-            _builder.set_prop("configurationReferences", AAZDictType, ".configuration_references")
-            _builder.set_prop("contentSource", AAZIntType, ".content_source")
+            _builder.set_prop("configuration_references", AAZDictType, ".configuration_references")
+            _builder.set_prop("content_source", AAZStrType, ".content_source")
             _builder.set_prop("name", AAZStrType, ".name")
-            _builder.set_prop("objectId", AAZStrType, ".object_id")
+            _builder.set_prop("object_id", AAZStrType, ".object_id")
             _builder.set_prop("settings", AAZDictType, ".settings")
             _builder.set_prop("type", AAZStrType, ".type")
 
-            configuration_references = _builder.get(".configurationReferences")
+            configuration_references = _builder.get(".configuration_references")
             if configuration_references is not None:
                 configuration_references.set_elements(AAZStrType, ".")
 
