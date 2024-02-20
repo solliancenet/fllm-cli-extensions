@@ -12,16 +12,16 @@ from foundationallm.cli.core.aaz import *
 
 
 @register_command(
-    "agent list",
+    "vectorization textembeddingprofile upsert",
 )
-class List(AAZCommand):
-    """list
+class Upsert(AAZCommand):
+    """upsert
     """
 
     _aaz_info = {
         "version": "2024-02-16",
         "resources": [
-            ["fllm-plane", "/instances/{}/providers/foundationallm.agent/agents", "2024-02-16"],
+            ["fllm-plane", "/instances/{}/providers/foundationallm.vectorization/textembeddingprofiles/{}", "2024-02-16"],
         ]
     }
 
@@ -45,11 +45,48 @@ class List(AAZCommand):
             options=["--instance-id"],
             required=True,
         )
+        _args_schema.name = AAZStrArg(
+            options=["--name"],
+            required=True,
+        )
+        _args_schema.body = AAZObjectArg(
+            options=["--body"],
+            help="TextEmbeddingProfile",
+            blank={},
+        )
+
+        body = cls._args_schema.body
+        body.configuration_references = AAZDictArg(
+            options=["configuration-references"],
+        )
+        body.name = AAZStrArg(
+            options=["name"],
+        )
+        body.object_id = AAZStrArg(
+            options=["object-id"],
+        )
+        body.settings = AAZDictArg(
+            options=["settings"],
+        )
+        body.text_embedding = AAZStrArg(
+            options=["text-embedding"],
+            help="TextEmbeddingType",
+            enum={"SemanticKernelTextEmbedding": "SemanticKernelTextEmbedding"},
+        )
+        body.type = AAZStrArg(
+            options=["type"],
+        )
+
+        configuration_references = cls._args_schema.body.configuration_references
+        configuration_references.Element = AAZStrArg()
+
+        settings = cls._args_schema.body.settings
+        settings.Element = AAZStrArg()
         return cls._args_schema
 
     def _execute_operations(self):
         self.pre_operations()
-        self.AgentsList(ctx=self.ctx)()
+        self.TextembeddingprofilesUpsert(ctx=self.ctx)()
         self.post_operations()
 
     @register_callback
@@ -64,7 +101,7 @@ class List(AAZCommand):
         result = self.deserialize_output(self.ctx.vars.instance, client_flatten=True)
         return result
 
-    class AgentsList(AAZHttpOperation):
+    class TextembeddingprofilesUpsert(AAZHttpOperation):
         CLIENT_TYPE = "FllmClient"
 
         def __call__(self, *args, **kwargs):
@@ -78,13 +115,13 @@ class List(AAZCommand):
         @property
         def url(self):
             return self.client.format_url(
-                "/instances/{instanceId}/providers/FoundationaLLM.Agent/agents",
+                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/textembeddingprofiles/{name}",
                 **self.url_parameters
             )
 
         @property
         def method(self):
-            return "GET"
+            return "POST"
 
         @property
         def error_format(self):
@@ -95,6 +132,10 @@ class List(AAZCommand):
             parameters = {
                 **self.serialize_url_param(
                     "instanceId", self.ctx.args.instance_id,
+                    required=True,
+                ),
+                **self.serialize_url_param(
+                    "name", self.ctx.args.name,
                     required=True,
                 ),
             }
@@ -113,10 +154,37 @@ class List(AAZCommand):
         def header_parameters(self):
             parameters = {
                 **self.serialize_header_param(
+                    "Content-Type", "application/json",
+                ),
+                **self.serialize_header_param(
                     "Accept", "application/json",
                 ),
             }
             return parameters
+
+        @property
+        def content(self):
+            _content_value, _builder = self.new_content_builder(
+                self.ctx.args.body,
+                typ=AAZObjectType,
+                typ_kwargs={"flags": {"client_flatten": True}}
+            )
+            _builder.set_prop("configuration_references", AAZDictType, ".configuration_references")
+            _builder.set_prop("name", AAZStrType, ".name")
+            _builder.set_prop("object_id", AAZStrType, ".object_id")
+            _builder.set_prop("settings", AAZDictType, ".settings")
+            _builder.set_prop("text_embedding", AAZStrType, ".text_embedding")
+            _builder.set_prop("type", AAZStrType, ".type")
+
+            configuration_references = _builder.get(".configuration_references")
+            if configuration_references is not None:
+                configuration_references.set_elements(AAZStrType, ".")
+
+            settings = _builder.get(".settings")
+            if settings is not None:
+                settings.set_elements(AAZStrType, ".")
+
+            return self.serialize_content(_content_value)
 
         def on_200(self, session):
             data = self.deserialize_http_content(session)
@@ -133,53 +201,18 @@ class List(AAZCommand):
             if cls._schema_on_200 is not None:
                 return cls._schema_on_200
 
-            cls._schema_on_200 = AAZListType()
+            cls._schema_on_200 = AAZObjectType()
 
             _schema_on_200 = cls._schema_on_200
-            _schema_on_200.Element = AAZObjectType()
-
-            _element = cls._schema_on_200.Element
-            _element.conversation_history = AAZObjectType()
-            _element.description = AAZStrType()
-            _element.gatekeeper = AAZObjectType()
-            _element.indexing_profile_object_id = AAZStrType()
-            _element.language_model = AAZObjectType()
-            _element.name = AAZStrType()
-            _element.object_id = AAZStrType()
-            _element.orchestrator = AAZStrType()
-            _element.prompt_object_id = AAZStrType()
-            _element.sessions_enabled = AAZBoolType()
-            _element.text_embedding_profile_object_id = AAZStrType()
-            _element.text_partitioning_profile_object_id = AAZStrType()
-            _element.type = AAZStrType()
-
-            conversation_history = cls._schema_on_200.Element.conversation_history
-            conversation_history.enabled = AAZBoolType()
-            conversation_history.max_history = AAZIntType()
-
-            gatekeeper = cls._schema_on_200.Element.gatekeeper
-            gatekeeper.options = AAZListType()
-            gatekeeper.use_system_setting = AAZBoolType()
-
-            options = cls._schema_on_200.Element.gatekeeper.options
-            options.Element = AAZStrType()
-
-            language_model = cls._schema_on_200.Element.language_model
-            language_model.api_endpoint = AAZStrType()
-            language_model.api_key = AAZStrType()
-            language_model.api_version = AAZStrType()
-            language_model.deployment = AAZStrType()
-            language_model.provider = AAZStrType()
-            language_model.temperature = AAZFloatType()
-            language_model.type = AAZStrType()
-            language_model.use_chat = AAZBoolType()
-            language_model.version = AAZStrType()
+            _schema_on_200.object_id = AAZStrType(
+                serialized_name="ObjectId",
+            )
 
             return cls._schema_on_200
 
 
-class _ListHelper:
-    """Helper class for List"""
+class _UpsertHelper:
+    """Helper class for Upsert"""
 
 
-__all__ = ["List"]
+__all__ = ["Upsert"]

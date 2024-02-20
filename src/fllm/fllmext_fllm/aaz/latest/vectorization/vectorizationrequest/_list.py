@@ -12,7 +12,7 @@ from foundationallm.cli.core.aaz import *
 
 
 @register_command(
-    "agent list",
+    "vectorization vectorizationrequest list",
 )
 class List(AAZCommand):
     """list
@@ -21,7 +21,7 @@ class List(AAZCommand):
     _aaz_info = {
         "version": "2024-02-16",
         "resources": [
-            ["fllm-plane", "/instances/{}/providers/foundationallm.agent/agents", "2024-02-16"],
+            ["fllm-plane", "/instances/{}/providers/foundationallm.vectorization/vectorizationrequests", "2024-02-16"],
         ]
     }
 
@@ -49,7 +49,7 @@ class List(AAZCommand):
 
     def _execute_operations(self):
         self.pre_operations()
-        self.AgentsList(ctx=self.ctx)()
+        self.VectorizationrequestsList(ctx=self.ctx)()
         self.post_operations()
 
     @register_callback
@@ -64,7 +64,7 @@ class List(AAZCommand):
         result = self.deserialize_output(self.ctx.vars.instance, client_flatten=True)
         return result
 
-    class AgentsList(AAZHttpOperation):
+    class VectorizationrequestsList(AAZHttpOperation):
         CLIENT_TYPE = "FllmClient"
 
         def __call__(self, *args, **kwargs):
@@ -78,7 +78,7 @@ class List(AAZCommand):
         @property
         def url(self):
             return self.client.format_url(
-                "/instances/{instanceId}/providers/FoundationaLLM.Agent/agents",
+                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/vectorizationrequests",
                 **self.url_parameters
             )
 
@@ -139,41 +139,68 @@ class List(AAZCommand):
             _schema_on_200.Element = AAZObjectType()
 
             _element = cls._schema_on_200.Element
-            _element.conversation_history = AAZObjectType()
-            _element.description = AAZStrType()
-            _element.gatekeeper = AAZObjectType()
-            _element.indexing_profile_object_id = AAZStrType()
-            _element.language_model = AAZObjectType()
-            _element.name = AAZStrType()
-            _element.object_id = AAZStrType()
-            _element.orchestrator = AAZStrType()
-            _element.prompt_object_id = AAZStrType()
-            _element.sessions_enabled = AAZBoolType()
-            _element.text_embedding_profile_object_id = AAZStrType()
-            _element.text_partitioning_profile_object_id = AAZStrType()
-            _element.type = AAZStrType()
+            _element.complete = AAZBoolType(
+                flags={"read_only": True},
+            )
+            _element.completed_steps = AAZListType(
+                serialized_name="completedSteps",
+            )
+            _element.content_identifier = AAZObjectType(
+                serialized_name="contentIdentifier",
+            )
+            _element.current_step = AAZStrType(
+                serialized_name="currentStep",
+                flags={"read_only": True},
+            )
+            _element.id = AAZStrType()
+            _element.object_id = AAZStrType(
+                serialized_name="objectId",
+            )
+            _element.processing_type = AAZIntType(
+                serialized_name="processingType",
+            )
+            _element.remaining_steps = AAZListType(
+                serialized_name="remainingSteps",
+            )
+            _element.steps = AAZListType()
 
-            conversation_history = cls._schema_on_200.Element.conversation_history
-            conversation_history.enabled = AAZBoolType()
-            conversation_history.max_history = AAZIntType()
+            completed_steps = cls._schema_on_200.Element.completed_steps
+            completed_steps.Element = AAZStrType()
 
-            gatekeeper = cls._schema_on_200.Element.gatekeeper
-            gatekeeper.options = AAZListType()
-            gatekeeper.use_system_setting = AAZBoolType()
+            content_identifier = cls._schema_on_200.Element.content_identifier
+            content_identifier.canonical_id = AAZStrType(
+                serialized_name="canonicalId",
+            )
+            content_identifier.content_source_profile_name = AAZStrType(
+                serialized_name="contentSourceProfileName",
+            )
+            content_identifier.file_name = AAZStrType(
+                serialized_name="fileName",
+                flags={"read_only": True},
+            )
+            content_identifier.multipart_id = AAZListType(
+                serialized_name="multipartId",
+            )
+            content_identifier.unique_id = AAZStrType(
+                serialized_name="uniqueId",
+                flags={"read_only": True},
+            )
 
-            options = cls._schema_on_200.Element.gatekeeper.options
-            options.Element = AAZStrType()
+            multipart_id = cls._schema_on_200.Element.content_identifier.multipart_id
+            multipart_id.Element = AAZStrType()
 
-            language_model = cls._schema_on_200.Element.language_model
-            language_model.api_endpoint = AAZStrType()
-            language_model.api_key = AAZStrType()
-            language_model.api_version = AAZStrType()
-            language_model.deployment = AAZStrType()
-            language_model.provider = AAZStrType()
-            language_model.temperature = AAZFloatType()
-            language_model.type = AAZStrType()
-            language_model.use_chat = AAZBoolType()
-            language_model.version = AAZStrType()
+            remaining_steps = cls._schema_on_200.Element.remaining_steps
+            remaining_steps.Element = AAZStrType()
+
+            steps = cls._schema_on_200.Element.steps
+            steps.Element = AAZObjectType()
+
+            _element = cls._schema_on_200.Element.steps.Element
+            _element.id = AAZStrType()
+            _element.parameters = AAZDictType()
+
+            parameters = cls._schema_on_200.Element.steps.Element.parameters
+            parameters.Element = AAZStrType()
 
             return cls._schema_on_200
 

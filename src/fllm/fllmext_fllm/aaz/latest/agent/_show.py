@@ -149,15 +149,16 @@ class Show(AAZCommand):
             _element = cls._schema_on_200.Element
             _element.conversation_history = AAZObjectType()
             _element.description = AAZStrType()
-            _element.embedding_profile = AAZStrType()
             _element.gatekeeper = AAZObjectType()
-            _element.indexing_profile = AAZStrType()
+            _element.indexing_profile_object_id = AAZStrType()
             _element.language_model = AAZObjectType()
             _element.name = AAZStrType()
             _element.object_id = AAZStrType()
             _element.orchestrator = AAZStrType()
-            _element.prompt = AAZStrType()
+            _element.prompt_object_id = AAZStrType()
             _element.sessions_enabled = AAZBoolType()
+            _element.text_embedding_profile_object_id = AAZStrType()
+            _element.text_partitioning_profile_object_id = AAZStrType()
             _element.type = AAZStrType()
 
             conversation_history = cls._schema_on_200.Element.conversation_history

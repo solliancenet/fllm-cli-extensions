@@ -12,16 +12,16 @@ from foundationallm.cli.core.aaz import *
 
 
 @register_command(
-    "agent list",
+    "configuration configuration branding show",
 )
-class List(AAZCommand):
-    """list
+class Show(AAZCommand):
+    """Get the branding configuration from app configuration.
     """
 
     _aaz_info = {
         "version": "2024-02-16",
         "resources": [
-            ["fllm-plane", "/instances/{}/providers/foundationallm.agent/agents", "2024-02-16"],
+            ["fllm-plane", "/instances/{}/providersx/foundationallm.configuration/configurations/branding", "2024-02-16"],
         ]
     }
 
@@ -49,7 +49,7 @@ class List(AAZCommand):
 
     def _execute_operations(self):
         self.pre_operations()
-        self.AgentsList(ctx=self.ctx)()
+        self.GetBrandingConfigurations(ctx=self.ctx)()
         self.post_operations()
 
     @register_callback
@@ -64,7 +64,7 @@ class List(AAZCommand):
         result = self.deserialize_output(self.ctx.vars.instance, client_flatten=True)
         return result
 
-    class AgentsList(AAZHttpOperation):
+    class GetBrandingConfigurations(AAZHttpOperation):
         CLIENT_TYPE = "FllmClient"
 
         def __call__(self, *args, **kwargs):
@@ -78,7 +78,7 @@ class List(AAZCommand):
         @property
         def url(self):
             return self.client.format_url(
-                "/instances/{instanceId}/providers/FoundationaLLM.Agent/agents",
+                "/instances/{instanceId}/providersX/FoundationaLLM.Configuration/configurations/branding",
                 **self.url_parameters
             )
 
@@ -133,53 +133,69 @@ class List(AAZCommand):
             if cls._schema_on_200 is not None:
                 return cls._schema_on_200
 
-            cls._schema_on_200 = AAZListType()
+            cls._schema_on_200 = AAZObjectType()
 
             _schema_on_200 = cls._schema_on_200
-            _schema_on_200.Element = AAZObjectType()
-
-            _element = cls._schema_on_200.Element
-            _element.conversation_history = AAZObjectType()
-            _element.description = AAZStrType()
-            _element.gatekeeper = AAZObjectType()
-            _element.indexing_profile_object_id = AAZStrType()
-            _element.language_model = AAZObjectType()
-            _element.name = AAZStrType()
-            _element.object_id = AAZStrType()
-            _element.orchestrator = AAZStrType()
-            _element.prompt_object_id = AAZStrType()
-            _element.sessions_enabled = AAZBoolType()
-            _element.text_embedding_profile_object_id = AAZStrType()
-            _element.text_partitioning_profile_object_id = AAZStrType()
-            _element.type = AAZStrType()
-
-            conversation_history = cls._schema_on_200.Element.conversation_history
-            conversation_history.enabled = AAZBoolType()
-            conversation_history.max_history = AAZIntType()
-
-            gatekeeper = cls._schema_on_200.Element.gatekeeper
-            gatekeeper.options = AAZListType()
-            gatekeeper.use_system_setting = AAZBoolType()
-
-            options = cls._schema_on_200.Element.gatekeeper.options
-            options.Element = AAZStrType()
-
-            language_model = cls._schema_on_200.Element.language_model
-            language_model.api_endpoint = AAZStrType()
-            language_model.api_key = AAZStrType()
-            language_model.api_version = AAZStrType()
-            language_model.deployment = AAZStrType()
-            language_model.provider = AAZStrType()
-            language_model.temperature = AAZFloatType()
-            language_model.type = AAZStrType()
-            language_model.use_chat = AAZBoolType()
-            language_model.version = AAZStrType()
+            _schema_on_200.accent_color = AAZStrType(
+                serialized_name="accentColor",
+            )
+            _schema_on_200.accent_text_color = AAZStrType(
+                serialized_name="accentTextColor",
+            )
+            _schema_on_200.allow_agent_selection = AAZStrType(
+                serialized_name="allowAgentSelection",
+            )
+            _schema_on_200.background_color = AAZStrType(
+                serialized_name="backgroundColor",
+            )
+            _schema_on_200.company_name = AAZStrType(
+                serialized_name="companyName",
+            )
+            _schema_on_200.fav_icon_url = AAZStrType(
+                serialized_name="favIconUrl",
+            )
+            _schema_on_200.kiosk_mode = AAZBoolType(
+                serialized_name="kioskMode",
+            )
+            _schema_on_200.logo_text = AAZStrType(
+                serialized_name="logoText",
+            )
+            _schema_on_200.logo_url = AAZStrType(
+                serialized_name="logoUrl",
+            )
+            _schema_on_200.page_title = AAZStrType(
+                serialized_name="pageTitle",
+            )
+            _schema_on_200.primary_button_background_color = AAZStrType(
+                serialized_name="primaryButtonBackgroundColor",
+            )
+            _schema_on_200.primary_button_text_color = AAZStrType(
+                serialized_name="primaryButtonTextColor",
+            )
+            _schema_on_200.primary_color = AAZStrType(
+                serialized_name="primaryColor",
+            )
+            _schema_on_200.primary_text_color = AAZStrType(
+                serialized_name="primaryTextColor",
+            )
+            _schema_on_200.secondary_button_background_color = AAZStrType(
+                serialized_name="secondaryButtonBackgroundColor",
+            )
+            _schema_on_200.secondary_button_text_color = AAZStrType(
+                serialized_name="secondaryButtonTextColor",
+            )
+            _schema_on_200.secondary_color = AAZStrType(
+                serialized_name="secondaryColor",
+            )
+            _schema_on_200.secondary_text_color = AAZStrType(
+                serialized_name="secondaryTextColor",
+            )
 
             return cls._schema_on_200
 
 
-class _ListHelper:
-    """Helper class for List"""
+class _ShowHelper:
+    """Helper class for Show"""
 
 
-__all__ = ["List"]
+__all__ = ["Show"]

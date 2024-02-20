@@ -63,15 +63,12 @@ class Upsert(AAZCommand):
         body.description = AAZStrArg(
             options=["description"],
         )
-        body.embedding_profile = AAZStrArg(
-            options=["embedding-profile"],
-        )
         body.gatekeeper = AAZObjectArg(
             options=["gatekeeper"],
             help="Gatekeeper",
         )
-        body.indexing_profile = AAZStrArg(
-            options=["indexing-profile"],
+        body.indexing_profile_object_id = AAZStrArg(
+            options=["indexing-profile-object-id"],
         )
         body.language_model = AAZObjectArg(
             options=["language-model"],
@@ -86,11 +83,17 @@ class Upsert(AAZCommand):
         body.orchestrator = AAZStrArg(
             options=["orchestrator"],
         )
-        body.prompt = AAZStrArg(
-            options=["prompt"],
+        body.prompt_object_id = AAZStrArg(
+            options=["prompt-object-id"],
         )
         body.sessions_enabled = AAZBoolArg(
             options=["sessions-enabled"],
+        )
+        body.text_embedding_profile_object_id = AAZStrArg(
+            options=["text-embedding-profile-object-id"],
+        )
+        body.text_partitioning_profile_object_id = AAZStrArg(
+            options=["text-partitioning-profile-object-id"],
         )
         body.type = AAZStrArg(
             options=["type"],
@@ -235,15 +238,16 @@ class Upsert(AAZCommand):
             )
             _builder.set_prop("conversation_history", AAZObjectType, ".conversation_history")
             _builder.set_prop("description", AAZStrType, ".description")
-            _builder.set_prop("embedding_profile", AAZStrType, ".embedding_profile")
             _builder.set_prop("gatekeeper", AAZObjectType, ".gatekeeper")
-            _builder.set_prop("indexing_profile", AAZStrType, ".indexing_profile")
+            _builder.set_prop("indexing_profile_object_id", AAZStrType, ".indexing_profile_object_id")
             _builder.set_prop("language_model", AAZObjectType, ".language_model")
             _builder.set_prop("name", AAZStrType, ".name")
             _builder.set_prop("object_id", AAZStrType, ".object_id")
             _builder.set_prop("orchestrator", AAZStrType, ".orchestrator")
-            _builder.set_prop("prompt", AAZStrType, ".prompt")
+            _builder.set_prop("prompt_object_id", AAZStrType, ".prompt_object_id")
             _builder.set_prop("sessions_enabled", AAZBoolType, ".sessions_enabled")
+            _builder.set_prop("text_embedding_profile_object_id", AAZStrType, ".text_embedding_profile_object_id")
+            _builder.set_prop("text_partitioning_profile_object_id", AAZStrType, ".text_partitioning_profile_object_id")
             _builder.set_prop("type", AAZStrType, ".type")
 
             conversation_history = _builder.get(".conversation_history")
