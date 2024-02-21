@@ -34,14 +34,14 @@ with open('HISTORY.rst', 'r', encoding='utf-8') as f:
     HISTORY = f.read()
 
 setup(
-    name='fllm',
+    name='fllm-cli-extension',
     version=VERSION,
     description='FLLM Command-Line Tools Fllm Extension.',
     long_description=README + '\n\n' + HISTORY,
     license='MIT',
     author="Solliance Corp",
     author_email="foundationllm@solliance.net",
-    url='https://github.com/solliancenet/fllm-cli-extensions/tree/main/src/fllm',
+    url='https://github.com/solliancenet/fllm-cli-extensions',
     classifiers=CLASSIFIERS,
     packages=find_packages(exclude=["tests"]),
     package_data={'fllmext_fllm': ['fllmext_metadata.json']},
