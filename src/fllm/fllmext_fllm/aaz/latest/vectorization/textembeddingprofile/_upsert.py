@@ -56,6 +56,11 @@ class Upsert(AAZCommand):
         )
 
         body = cls._args_schema.body
+
+        body.type = AAZStrArg(
+            options=["type"],
+        )
+        
         body.configuration_references = AAZDictArg(
             options=["configuration-references"],
         )
@@ -72,9 +77,6 @@ class Upsert(AAZCommand):
             options=["text-embedding"],
             help="TextEmbeddingType",
             enum={"SemanticKernelTextEmbedding": "SemanticKernelTextEmbedding"},
-        )
-        body.type = AAZStrArg(
-            options=["type"],
         )
 
         configuration_references = cls._args_schema.body.configuration_references

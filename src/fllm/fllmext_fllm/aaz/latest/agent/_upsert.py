@@ -56,6 +56,11 @@ class Upsert(AAZCommand):
         )
 
         body = cls._args_schema.body
+
+        body.type = AAZStrArg(
+            options=["type"],
+        )
+
         body.conversation_history = AAZObjectArg(
             options=["conversation-history"],
             help="ConversationHistory",
@@ -94,9 +99,6 @@ class Upsert(AAZCommand):
         )
         body.text_partitioning_profile_object_id = AAZStrArg(
             options=["text-partitioning-profile-object-id"],
-        )
-        body.type = AAZStrArg(
-            options=["type"],
         )
 
         conversation_history = cls._args_schema.body.conversation_history

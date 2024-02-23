@@ -56,6 +56,11 @@ class Upsert(AAZCommand):
         )
 
         body = cls._args_schema.body
+
+        body.type = AAZStrArg(
+            options=["type"],
+        )
+        
         body.description = AAZStrArg(
             options=["description"],
         )
@@ -71,9 +76,7 @@ class Upsert(AAZCommand):
         body.suffix = AAZStrArg(
             options=["suffix"],
         )
-        body.type = AAZStrArg(
-            options=["type"],
-        )
+        
         return cls._args_schema
 
     def _execute_operations(self):
