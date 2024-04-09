@@ -139,12 +139,18 @@ class List(AAZCommand):
             _schema_on_200.Element = AAZObjectType()
 
             _element = cls._schema_on_200.Element
+            _element.created_by = AAZStrType()
+            _element.created_on = AAZObjectType()
+            _element.deleted = AAZBoolType()
             _element.description = AAZStrType()
+            _element.display_name = AAZStrType()
             _element.name = AAZStrType()
             _element.object_id = AAZStrType()
             _element.prefix = AAZStrType()
             _element.suffix = AAZStrType()
             _element.type = AAZStrType()
+            _element.updated_by = AAZStrType()
+            _element.updated_on = AAZObjectType()
 
             return cls._schema_on_200
 

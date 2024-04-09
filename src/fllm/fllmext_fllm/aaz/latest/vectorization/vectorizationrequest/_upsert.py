@@ -62,6 +62,7 @@ class Upsert(AAZCommand):
         cls._build_args_vectorization_step_create(body.item)
         body.completed_steps = AAZStrArg(
             options=["completed-steps"],
+            help="completed_steps",
         )
         body.content_identifier = AAZObjectArg(
             options=["content-identifier"],
@@ -69,9 +70,11 @@ class Upsert(AAZCommand):
         )
         body.id = AAZStrArg(
             options=["id"],
+            help="id",
         )
         body.object_id = AAZStrArg(
             options=["object-id"],
+            help="object_id",
         )
         body.processing_type = AAZStrArg(
             options=["processing-type"],
@@ -80,21 +83,33 @@ class Upsert(AAZCommand):
         )
         body.remaining_steps = AAZStrArg(
             options=["remaining-steps"],
+            help="remaining_steps",
         )
         body.steps = AAZListArg(
             options=["steps"],
+            help="steps",
         )
 
         content_identifier = cls._args_schema.body.content_identifier
         content_identifier.canonical_id = AAZStrArg(
             options=["canonical-id"],
+            help="canonical_id",
         )
         content_identifier.content_source_profile_name = AAZStrArg(
             options=["content-source-profile-name"],
+            help="content_source_profile_name",
+        )
+        content_identifier.metadata = AAZDictArg(
+            options=["metadata"],
+            help="metadata",
         )
         content_identifier.multipart_id = AAZStrArg(
             options=["multipart-id"],
+            help="multipart_id",
         )
+
+        metadata = cls._args_schema.body.content_identifier.metadata
+        metadata.Element = AAZStrArg()
 
         steps = cls._args_schema.body.steps
         steps.Element = AAZObjectArg()
@@ -115,9 +130,11 @@ class Upsert(AAZCommand):
         vectorization_step_create = cls._args_vectorization_step_create
         vectorization_step_create.id = AAZStrArg(
             options=["id"],
+            help="id",
         )
         vectorization_step_create.parameters = AAZDictArg(
             options=["parameters"],
+            help="parameters",
         )
 
         parameters = cls._args_vectorization_step_create.parameters
@@ -128,7 +145,7 @@ class Upsert(AAZCommand):
 
     def _execute_operations(self):
         self.pre_operations()
-        self.VectorizationrequestsUpsert(ctx=self.ctx)()
+        self.VectorizationRequestsUpsert(ctx=self.ctx)()
         self.post_operations()
 
     @register_callback
@@ -143,7 +160,7 @@ class Upsert(AAZCommand):
         result = self.deserialize_output(self.ctx.vars.instance, client_flatten=True)
         return result
 
-    class VectorizationrequestsUpsert(AAZHttpOperation):
+    class VectorizationRequestsUpsert(AAZHttpOperation):
         CLIENT_TYPE = "FllmClient"
 
         def __call__(self, *args, **kwargs):
@@ -157,7 +174,7 @@ class Upsert(AAZCommand):
         @property
         def url(self):
             return self.client.format_url(
-                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/vectorizationrequests/{name}",
+                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/vectorizationRequests/{name}",
                 **self.url_parameters
             )
 
@@ -224,7 +241,12 @@ class Upsert(AAZCommand):
             if content_identifier is not None:
                 content_identifier.set_prop("canonical_id", AAZStrType, ".canonical_id")
                 content_identifier.set_prop("content_source_profile_name", AAZStrType, ".content_source_profile_name")
+                content_identifier.set_prop("metadata", AAZDictType, ".metadata")
                 content_identifier.set_prop("multipart_id", AAZStrType, ".multipart_id")
+
+            metadata = _builder.get(".content_identifier.metadata")
+            if metadata is not None:
+                metadata.set_elements(AAZStrType, ".")
 
             steps = _builder.get(".steps")
             if steps is not None:

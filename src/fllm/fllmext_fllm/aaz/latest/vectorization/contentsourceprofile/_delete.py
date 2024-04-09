@@ -54,7 +54,7 @@ class Delete(AAZCommand):
 
     def _execute_operations(self):
         self.pre_operations()
-        self.ContentsourceprofilesDelete(ctx=self.ctx)()
+        self.ContentSourceProfilesDelete(ctx=self.ctx)()
         self.post_operations()
 
     @register_callback
@@ -65,7 +65,7 @@ class Delete(AAZCommand):
     def post_operations(self):
         pass
 
-    class ContentsourceprofilesDelete(AAZHttpOperation):
+    class ContentSourceProfilesDelete(AAZHttpOperation):
         CLIENT_TYPE = "FllmClient"
 
         def __call__(self, *args, **kwargs):
@@ -79,7 +79,7 @@ class Delete(AAZCommand):
         @property
         def url(self):
             return self.client.format_url(
-                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/contentsourceprofiles/{name}",
+                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/contentSourceProfiles/{name}",
                 **self.url_parameters
             )
 

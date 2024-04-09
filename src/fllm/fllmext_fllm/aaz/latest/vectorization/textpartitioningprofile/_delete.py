@@ -54,7 +54,7 @@ class Delete(AAZCommand):
 
     def _execute_operations(self):
         self.pre_operations()
-        self.TextpartitioningprofilesDelete(ctx=self.ctx)()
+        self.TextPartitioningProfilesDelete(ctx=self.ctx)()
         self.post_operations()
 
     @register_callback
@@ -65,7 +65,7 @@ class Delete(AAZCommand):
     def post_operations(self):
         pass
 
-    class TextpartitioningprofilesDelete(AAZHttpOperation):
+    class TextPartitioningProfilesDelete(AAZHttpOperation):
         CLIENT_TYPE = "FllmClient"
 
         def __call__(self, *args, **kwargs):
@@ -79,7 +79,7 @@ class Delete(AAZCommand):
         @property
         def url(self):
             return self.client.format_url(
-                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/textpartitioningprofiles/{name}",
+                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/textPartitioningProfiles/{name}",
                 **self.url_parameters
             )
 

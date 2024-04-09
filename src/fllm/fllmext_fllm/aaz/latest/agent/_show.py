@@ -141,38 +141,42 @@ class Show(AAZCommand):
             if cls._schema_on_200 is not None:
                 return cls._schema_on_200
 
-            cls._schema_on_200 = AAZListType()
+            cls._schema_on_200 = AAZObjectType()
 
             _schema_on_200 = cls._schema_on_200
-            _schema_on_200.Element = AAZObjectType()
+            _schema_on_200.content_source_profile_object_id = AAZStrType()
+            _schema_on_200.conversation_history = AAZObjectType()
+            _schema_on_200.created_by = AAZStrType()
+            _schema_on_200.created_on = AAZObjectType()
+            _schema_on_200.deleted = AAZBoolType()
+            _schema_on_200.description = AAZStrType()
+            _schema_on_200.display_name = AAZStrType()
+            _schema_on_200.gatekeeper = AAZObjectType()
+            _schema_on_200.indexing_profile_object_id = AAZStrType()
+            _schema_on_200.language_model = AAZObjectType()
+            _schema_on_200.name = AAZStrType()
+            _schema_on_200.object_id = AAZStrType()
+            _schema_on_200.orchestration_settings = AAZObjectType()
+            _schema_on_200.prompt_object_id = AAZStrType()
+            _schema_on_200.sessions_enabled = AAZBoolType()
+            _schema_on_200.text_embedding_profile_object_id = AAZStrType()
+            _schema_on_200.text_partitioning_profile_object_id = AAZStrType()
+            _schema_on_200.type = AAZStrType()
+            _schema_on_200.updated_by = AAZStrType()
+            _schema_on_200.updated_on = AAZObjectType()
 
-            _element = cls._schema_on_200.Element
-            _element.conversation_history = AAZObjectType()
-            _element.description = AAZStrType()
-            _element.gatekeeper = AAZObjectType()
-            _element.indexing_profile_object_id = AAZStrType()
-            _element.language_model = AAZObjectType()
-            _element.name = AAZStrType()
-            _element.object_id = AAZStrType()
-            _element.orchestrator = AAZStrType()
-            _element.prompt_object_id = AAZStrType()
-            _element.sessions_enabled = AAZBoolType()
-            _element.text_embedding_profile_object_id = AAZStrType()
-            _element.text_partitioning_profile_object_id = AAZStrType()
-            _element.type = AAZStrType()
-
-            conversation_history = cls._schema_on_200.Element.conversation_history
+            conversation_history = cls._schema_on_200.conversation_history
             conversation_history.enabled = AAZBoolType()
             conversation_history.max_history = AAZIntType()
 
-            gatekeeper = cls._schema_on_200.Element.gatekeeper
+            gatekeeper = cls._schema_on_200.gatekeeper
             gatekeeper.options = AAZListType()
             gatekeeper.use_system_setting = AAZBoolType()
 
-            options = cls._schema_on_200.Element.gatekeeper.options
+            options = cls._schema_on_200.gatekeeper.options
             options.Element = AAZStrType()
 
-            language_model = cls._schema_on_200.Element.language_model
+            language_model = cls._schema_on_200.language_model
             language_model.api_endpoint = AAZStrType()
             language_model.api_key = AAZStrType()
             language_model.api_version = AAZStrType()
@@ -182,6 +186,21 @@ class Show(AAZCommand):
             language_model.type = AAZStrType()
             language_model.use_chat = AAZBoolType()
             language_model.version = AAZStrType()
+
+            orchestration_settings = cls._schema_on_200.orchestration_settings
+            orchestration_settings.agent_parameters = AAZDictType()
+            orchestration_settings.endpoint_configuration = AAZDictType()
+            orchestration_settings.model_parameters = AAZDictType()
+            orchestration_settings.orchestrator = AAZStrType()
+
+            agent_parameters = cls._schema_on_200.orchestration_settings.agent_parameters
+            agent_parameters.Element = AAZStrType()
+
+            endpoint_configuration = cls._schema_on_200.orchestration_settings.endpoint_configuration
+            endpoint_configuration.Element = AAZStrType()
+
+            model_parameters = cls._schema_on_200.orchestration_settings.model_parameters
+            model_parameters.Element = AAZStrType()
 
             return cls._schema_on_200
 

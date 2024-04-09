@@ -53,7 +53,7 @@ class Show(AAZCommand):
 
     def _execute_operations(self):
         self.pre_operations()
-        self.VectorizationrequestsGet(ctx=self.ctx)()
+        self.VectorizationRequestsGet(ctx=self.ctx)()
         self.post_operations()
 
     @register_callback
@@ -68,7 +68,7 @@ class Show(AAZCommand):
         result = self.deserialize_output(self.ctx.vars.instance, client_flatten=True)
         return result
 
-    class VectorizationrequestsGet(AAZHttpOperation):
+    class VectorizationRequestsGet(AAZHttpOperation):
         CLIENT_TYPE = "FllmClient"
 
         def __call__(self, *args, **kwargs):
@@ -82,7 +82,7 @@ class Show(AAZCommand):
         @property
         def url(self):
             return self.client.format_url(
-                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/vectorizationrequests/{name}",
+                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/vectorizationRequests/{name}",
                 **self.url_parameters
             )
 
@@ -162,7 +162,11 @@ class Show(AAZCommand):
             content_identifier = cls._schema_on_200.Element.content_identifier
             content_identifier.canonical_id = AAZStrType()
             content_identifier.content_source_profile_name = AAZStrType()
+            content_identifier.metadata = AAZDictType()
             content_identifier.multipart_id = AAZStrType()
+
+            metadata = cls._schema_on_200.Element.content_identifier.metadata
+            metadata.Element = AAZStrType()
 
             steps = cls._schema_on_200.Element.steps
             steps.Element = AAZObjectType()

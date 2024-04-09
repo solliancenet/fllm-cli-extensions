@@ -49,7 +49,7 @@ class List(AAZCommand):
 
     def _execute_operations(self):
         self.pre_operations()
-        self.VectorizationrequestsList(ctx=self.ctx)()
+        self.VectorizationRequestsList(ctx=self.ctx)()
         self.post_operations()
 
     @register_callback
@@ -64,7 +64,7 @@ class List(AAZCommand):
         result = self.deserialize_output(self.ctx.vars.instance, client_flatten=True)
         return result
 
-    class VectorizationrequestsList(AAZHttpOperation):
+    class VectorizationRequestsList(AAZHttpOperation):
         CLIENT_TYPE = "FllmClient"
 
         def __call__(self, *args, **kwargs):
@@ -78,7 +78,7 @@ class List(AAZCommand):
         @property
         def url(self):
             return self.client.format_url(
-                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/vectorizationrequests",
+                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/vectorizationRequests",
                 **self.url_parameters
             )
 
@@ -154,7 +154,11 @@ class List(AAZCommand):
             content_identifier = cls._schema_on_200.Element.content_identifier
             content_identifier.canonical_id = AAZStrType()
             content_identifier.content_source_profile_name = AAZStrType()
+            content_identifier.metadata = AAZDictType()
             content_identifier.multipart_id = AAZStrType()
+
+            metadata = cls._schema_on_200.Element.content_identifier.metadata
+            metadata.Element = AAZStrType()
 
             steps = cls._schema_on_200.Element.steps
             steps.Element = AAZObjectType()

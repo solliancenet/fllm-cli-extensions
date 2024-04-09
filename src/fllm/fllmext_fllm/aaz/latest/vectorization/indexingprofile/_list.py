@@ -49,7 +49,7 @@ class List(AAZCommand):
 
     def _execute_operations(self):
         self.pre_operations()
-        self.IndexingprofilesList(ctx=self.ctx)()
+        self.IndexingProfilesList(ctx=self.ctx)()
         self.post_operations()
 
     @register_callback
@@ -64,7 +64,7 @@ class List(AAZCommand):
         result = self.deserialize_output(self.ctx.vars.instance, client_flatten=True)
         return result
 
-    class IndexingprofilesList(AAZHttpOperation):
+    class IndexingProfilesList(AAZHttpOperation):
         CLIENT_TYPE = "FllmClient"
 
         def __call__(self, *args, **kwargs):
@@ -78,7 +78,7 @@ class List(AAZCommand):
         @property
         def url(self):
             return self.client.format_url(
-                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/indexingprofiles",
+                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/indexingProfiles",
                 **self.url_parameters
             )
 
@@ -140,11 +140,18 @@ class List(AAZCommand):
 
             _element = cls._schema_on_200.Element
             _element.configuration_references = AAZDictType()
+            _element.created_by = AAZStrType()
+            _element.created_on = AAZObjectType()
+            _element.deleted = AAZBoolType()
+            _element.description = AAZStrType()
+            _element.display_name = AAZStrType()
             _element.indexer = AAZStrType()
             _element.name = AAZStrType()
             _element.object_id = AAZStrType()
             _element.settings = AAZDictType()
             _element.type = AAZStrType()
+            _element.updated_by = AAZStrType()
+            _element.updated_on = AAZObjectType()
 
             configuration_references = cls._schema_on_200.Element.configuration_references
             configuration_references.Element = AAZStrType()

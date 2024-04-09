@@ -54,7 +54,7 @@ class Delete(AAZCommand):
 
     def _execute_operations(self):
         self.pre_operations()
-        self.TextembeddingprofilesDelete(ctx=self.ctx)()
+        self.TextEmbeddingProfilesDelete(ctx=self.ctx)()
         self.post_operations()
 
     @register_callback
@@ -65,7 +65,7 @@ class Delete(AAZCommand):
     def post_operations(self):
         pass
 
-    class TextembeddingprofilesDelete(AAZHttpOperation):
+    class TextEmbeddingProfilesDelete(AAZHttpOperation):
         CLIENT_TYPE = "FllmClient"
 
         def __call__(self, *args, **kwargs):
@@ -79,7 +79,7 @@ class Delete(AAZCommand):
         @property
         def url(self):
             return self.client.format_url(
-                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/textembeddingprofiles/{name}",
+                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/textEmbeddingProfiles/{name}",
                 **self.url_parameters
             )
 

@@ -59,14 +59,37 @@ class Upsert(AAZCommand):
 
         body.type = AAZStrArg(
             options=["type"],
+            help="type",
         )
 
+        body.content_source_profile_object_id = AAZStrArg(
+            options=["content-source-profile-object-id"],
+            help="content_source_profile_object_id",
+        )
         body.conversation_history = AAZObjectArg(
             options=["conversation-history"],
             help="ConversationHistory",
         )
+        body.created_by = AAZStrArg(
+            options=["created-by"],
+            help="created_by",
+        )
+        body.created_on = AAZObjectArg(
+            options=["created-on"],
+            help="created_on",
+            blank={},
+        )
+        body.deleted = AAZBoolArg(
+            options=["deleted"],
+            help="deleted",
+        )
         body.description = AAZStrArg(
             options=["description"],
+            help="description",
+        )
+        body.display_name = AAZStrArg(
+            options=["display-name"],
+            help="display_name",
         )
         body.gatekeeper = AAZObjectArg(
             options=["gatekeeper"],
@@ -74,6 +97,7 @@ class Upsert(AAZCommand):
         )
         body.indexing_profile_object_id = AAZStrArg(
             options=["indexing-profile-object-id"],
+            help="indexing_profile_object_id",
         )
         body.language_model = AAZObjectArg(
             options=["language-model"],
@@ -81,41 +105,61 @@ class Upsert(AAZCommand):
         )
         body.name = AAZStrArg(
             options=["name"],
+            help="name",
         )
         body.object_id = AAZStrArg(
             options=["object-id"],
+            help="object_id",
         )
-        body.orchestrator = AAZStrArg(
-            options=["orchestrator"],
+        body.orchestration_settings = AAZObjectArg(
+            options=["orchestration-settings"],
+            help="OrchestrationSettings",
         )
         body.prompt_object_id = AAZStrArg(
             options=["prompt-object-id"],
+            help="prompt_object_id",
         )
         body.sessions_enabled = AAZBoolArg(
             options=["sessions-enabled"],
+            help="sessions_enabled",
         )
         body.text_embedding_profile_object_id = AAZStrArg(
             options=["text-embedding-profile-object-id"],
+            help="text_embedding_profile_object_id",
         )
         body.text_partitioning_profile_object_id = AAZStrArg(
             options=["text-partitioning-profile-object-id"],
+            help="text_partitioning_profile_object_id",
+        )
+        body.updated_by = AAZStrArg(
+            options=["updated-by"],
+            help="updated_by",
+        )
+        body.updated_on = AAZObjectArg(
+            options=["updated-on"],
+            help="updated_on",
+            blank={},
         )
 
         conversation_history = cls._args_schema.body.conversation_history
         conversation_history.enabled = AAZBoolArg(
             options=["enabled"],
+            help="enabled",
         )
         conversation_history.max_history = AAZIntArg(
             options=["max-history"],
+            help="max_history",
             default=0,
         )
 
         gatekeeper = cls._args_schema.body.gatekeeper
         gatekeeper.options = AAZListArg(
             options=["options"],
+            help="options",
         )
         gatekeeper.use_system_setting = AAZBoolArg(
             options=["use-system-setting"],
+            help="use_system_setting",
         )
 
         options = cls._args_schema.body.gatekeeper.options
@@ -124,31 +168,67 @@ class Upsert(AAZCommand):
         language_model = cls._args_schema.body.language_model
         language_model.api_endpoint = AAZStrArg(
             options=["api-endpoint"],
+            help="api_endpoint",
         )
         language_model.api_key = AAZStrArg(
             options=["api-key"],
+            help="api_key",
         )
         language_model.api_version = AAZStrArg(
             options=["api-version"],
+            help="api_version",
         )
         language_model.deployment = AAZStrArg(
             options=["deployment"],
+            help="deployment",
         )
         language_model.provider = AAZStrArg(
             options=["provider"],
+            help="provider",
         )
         language_model.temperature = AAZFloatArg(
             options=["temperature"],
+            help="temperature",
         )
         language_model.type = AAZStrArg(
             options=["type"],
+            help="type",
         )
         language_model.use_chat = AAZBoolArg(
             options=["use-chat"],
+            help="use_chat",
         )
         language_model.version = AAZStrArg(
             options=["version"],
+            help="version",
         )
+
+        orchestration_settings = cls._args_schema.body.orchestration_settings
+        orchestration_settings.agent_parameters = AAZDictArg(
+            options=["agent-parameters"],
+            help="agent_parameters",
+        )
+        orchestration_settings.endpoint_configuration = AAZDictArg(
+            options=["endpoint-configuration"],
+            help="endpoint_configuration",
+        )
+        orchestration_settings.model_parameters = AAZDictArg(
+            options=["model-parameters"],
+            help="model_parameters",
+        )
+        orchestration_settings.orchestrator = AAZStrArg(
+            options=["orchestrator"],
+            help="orchestrator",
+        )
+
+        agent_parameters = cls._args_schema.body.orchestration_settings.agent_parameters
+        agent_parameters.Element = AAZStrArg()
+
+        endpoint_configuration = cls._args_schema.body.orchestration_settings.endpoint_configuration
+        endpoint_configuration.Element = AAZStrArg()
+
+        model_parameters = cls._args_schema.body.orchestration_settings.model_parameters
+        model_parameters.Element = AAZStrArg()
         return cls._args_schema
 
     def _execute_operations(self):
@@ -236,19 +316,27 @@ class Upsert(AAZCommand):
                 typ=AAZObjectType,
                 typ_kwargs={"flags": {"client_flatten": True}}
             )
+
+            _builder.set_prop("type", AAZStrType, ".type")
+            _builder.set_prop("content_source_profile_object_id", AAZStrType, ".content_source_profile_object_id")
             _builder.set_prop("conversation_history", AAZObjectType, ".conversation_history")
+            _builder.set_prop("created_by", AAZStrType, ".created_by")
+            _builder.set_prop("created_on", AAZObjectType, ".created_on")
+            _builder.set_prop("deleted", AAZBoolType, ".deleted")
             _builder.set_prop("description", AAZStrType, ".description")
+            _builder.set_prop("display_name", AAZStrType, ".display_name")
             _builder.set_prop("gatekeeper", AAZObjectType, ".gatekeeper")
             _builder.set_prop("indexing_profile_object_id", AAZStrType, ".indexing_profile_object_id")
             _builder.set_prop("language_model", AAZObjectType, ".language_model")
             _builder.set_prop("name", AAZStrType, ".name")
             _builder.set_prop("object_id", AAZStrType, ".object_id")
-            _builder.set_prop("orchestrator", AAZStrType, ".orchestrator")
+            _builder.set_prop("orchestration_settings", AAZObjectType, ".orchestration_settings")
             _builder.set_prop("prompt_object_id", AAZStrType, ".prompt_object_id")
             _builder.set_prop("sessions_enabled", AAZBoolType, ".sessions_enabled")
             _builder.set_prop("text_embedding_profile_object_id", AAZStrType, ".text_embedding_profile_object_id")
             _builder.set_prop("text_partitioning_profile_object_id", AAZStrType, ".text_partitioning_profile_object_id")
-            _builder.set_prop("type", AAZStrType, ".type")
+            _builder.set_prop("updated_by", AAZStrType, ".updated_by")
+            _builder.set_prop("updated_on", AAZObjectType, ".updated_on")
 
             conversation_history = _builder.get(".conversation_history")
             if conversation_history is not None:
@@ -275,6 +363,25 @@ class Upsert(AAZCommand):
                 language_model.set_prop("type", AAZStrType, ".type")
                 language_model.set_prop("use_chat", AAZBoolType, ".use_chat")
                 language_model.set_prop("version", AAZStrType, ".version")
+
+            orchestration_settings = _builder.get(".orchestration_settings")
+            if orchestration_settings is not None:
+                orchestration_settings.set_prop("agent_parameters", AAZDictType, ".agent_parameters")
+                orchestration_settings.set_prop("endpoint_configuration", AAZDictType, ".endpoint_configuration")
+                orchestration_settings.set_prop("model_parameters", AAZDictType, ".model_parameters")
+                orchestration_settings.set_prop("orchestrator", AAZStrType, ".orchestrator")
+
+            agent_parameters = _builder.get(".orchestration_settings.agent_parameters")
+            if agent_parameters is not None:
+                agent_parameters.set_elements(AAZStrType, ".")
+
+            endpoint_configuration = _builder.get(".orchestration_settings.endpoint_configuration")
+            if endpoint_configuration is not None:
+                endpoint_configuration.set_elements(AAZStrType, ".")
+
+            model_parameters = _builder.get(".orchestration_settings.model_parameters")
+            if model_parameters is not None:
+                model_parameters.set_elements(AAZStrType, ".")
 
             return self.serialize_content(_content_value)
 

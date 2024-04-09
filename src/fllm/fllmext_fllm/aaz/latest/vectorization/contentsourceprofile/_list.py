@@ -49,7 +49,7 @@ class List(AAZCommand):
 
     def _execute_operations(self):
         self.pre_operations()
-        self.ContentsourceprofilesList(ctx=self.ctx)()
+        self.ContentSourceProfilesList(ctx=self.ctx)()
         self.post_operations()
 
     @register_callback
@@ -64,7 +64,7 @@ class List(AAZCommand):
         result = self.deserialize_output(self.ctx.vars.instance, client_flatten=True)
         return result
 
-    class ContentsourceprofilesList(AAZHttpOperation):
+    class ContentSourceProfilesList(AAZHttpOperation):
         CLIENT_TYPE = "FllmClient"
 
         def __call__(self, *args, **kwargs):
@@ -78,7 +78,7 @@ class List(AAZCommand):
         @property
         def url(self):
             return self.client.format_url(
-                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/contentsourceprofiles",
+                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/contentSourceProfiles",
                 **self.url_parameters
             )
 
@@ -141,10 +141,17 @@ class List(AAZCommand):
             _element = cls._schema_on_200.Element
             _element.configuration_references = AAZDictType()
             _element.content_source = AAZStrType()
+            _element.created_by = AAZStrType()
+            _element.created_on = AAZObjectType()
+            _element.deleted = AAZBoolType()
+            _element.description = AAZStrType()
+            _element.display_name = AAZStrType()
             _element.name = AAZStrType()
             _element.object_id = AAZStrType()
             _element.settings = AAZDictType()
             _element.type = AAZStrType()
+            _element.updated_by = AAZStrType()
+            _element.updated_on = AAZObjectType()
 
             configuration_references = cls._schema_on_200.Element.configuration_references
             configuration_references.Element = AAZStrType()

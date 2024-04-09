@@ -140,18 +140,21 @@ class List(AAZCommand):
 
             _element = cls._schema_on_200.Element
             _element.conversation_history = AAZObjectType()
+            _element.created_by = AAZStrType()
+            _element.created_on = AAZObjectType()
+            _element.deleted = AAZBoolType()
             _element.description = AAZStrType()
+            _element.display_name = AAZStrType()
             _element.gatekeeper = AAZObjectType()
-            _element.indexing_profile_object_id = AAZStrType()
             _element.language_model = AAZObjectType()
             _element.name = AAZStrType()
             _element.object_id = AAZStrType()
-            _element.orchestrator = AAZStrType()
+            _element.orchestration_settings = AAZObjectType()
             _element.prompt_object_id = AAZStrType()
             _element.sessions_enabled = AAZBoolType()
-            _element.text_embedding_profile_object_id = AAZStrType()
-            _element.text_partitioning_profile_object_id = AAZStrType()
             _element.type = AAZStrType()
+            _element.updated_by = AAZStrType()
+            _element.updated_on = AAZObjectType()
 
             conversation_history = cls._schema_on_200.Element.conversation_history
             conversation_history.enabled = AAZBoolType()
@@ -174,6 +177,21 @@ class List(AAZCommand):
             language_model.type = AAZStrType()
             language_model.use_chat = AAZBoolType()
             language_model.version = AAZStrType()
+
+            orchestration_settings = cls._schema_on_200.Element.orchestration_settings
+            orchestration_settings.agent_parameters = AAZDictType()
+            orchestration_settings.endpoint_configuration = AAZDictType()
+            orchestration_settings.model_parameters = AAZDictType()
+            orchestration_settings.orchestrator = AAZStrType()
+
+            agent_parameters = cls._schema_on_200.Element.orchestration_settings.agent_parameters
+            agent_parameters.Element = AAZStrType()
+
+            endpoint_configuration = cls._schema_on_200.Element.orchestration_settings.endpoint_configuration
+            endpoint_configuration.Element = AAZStrType()
+
+            model_parameters = cls._schema_on_200.Element.orchestration_settings.model_parameters
+            model_parameters.Element = AAZStrType()
 
             return cls._schema_on_200
 

@@ -56,11 +56,30 @@ class Upsert(AAZCommand):
         )
 
         body = cls._args_schema.body
-        body.type = AAZStrArg(
-            options=["type"],
-        )
         body.configuration_references = AAZDictArg(
             options=["configuration-references"],
+            help="configuration_references",
+        )
+        body.created_by = AAZStrArg(
+            options=["created-by"],
+            help="created_by",
+        )
+        body.created_on = AAZObjectArg(
+            options=["created-on"],
+            help="created_on",
+            blank={},
+        )
+        body.deleted = AAZBoolArg(
+            options=["deleted"],
+            help="deleted",
+        )
+        body.description = AAZStrArg(
+            options=["description"],
+            help="description",
+        )
+        body.display_name = AAZStrArg(
+            options=["display-name"],
+            help="display_name",
         )
         body.indexer = AAZStrArg(
             options=["indexer"],
@@ -69,12 +88,28 @@ class Upsert(AAZCommand):
         )
         body.name = AAZStrArg(
             options=["name"],
+            help="name",
         )
         body.object_id = AAZStrArg(
             options=["object-id"],
+            help="object_id",
         )
         body.settings = AAZDictArg(
             options=["settings"],
+            help="settings",
+        )
+        body.type = AAZStrArg(
+            options=["type"],
+            help="type",
+        )
+        body.updated_by = AAZStrArg(
+            options=["updated-by"],
+            help="updated_by",
+        )
+        body.updated_on = AAZObjectArg(
+            options=["updated-on"],
+            help="updated_on",
+            blank={},
         )
 
         configuration_references = cls._args_schema.body.configuration_references
@@ -86,7 +121,7 @@ class Upsert(AAZCommand):
 
     def _execute_operations(self):
         self.pre_operations()
-        self.IndexingprofilesUpsert(ctx=self.ctx)()
+        self.IndexingProfilesUpsert(ctx=self.ctx)()
         self.post_operations()
 
     @register_callback
@@ -101,7 +136,7 @@ class Upsert(AAZCommand):
         result = self.deserialize_output(self.ctx.vars.instance, client_flatten=True)
         return result
 
-    class IndexingprofilesUpsert(AAZHttpOperation):
+    class IndexingProfilesUpsert(AAZHttpOperation):
         CLIENT_TYPE = "FllmClient"
 
         def __call__(self, *args, **kwargs):
@@ -115,7 +150,7 @@ class Upsert(AAZCommand):
         @property
         def url(self):
             return self.client.format_url(
-                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/indexingprofiles/{name}",
+                "/instances/{instanceId}/providers/FoundationaLLM.Vectorization/indexingProfiles/{name}",
                 **self.url_parameters
             )
 
@@ -170,11 +205,18 @@ class Upsert(AAZCommand):
                 typ_kwargs={"flags": {"client_flatten": True}}
             )
             _builder.set_prop("configuration_references", AAZDictType, ".configuration_references")
+            _builder.set_prop("created_by", AAZStrType, ".created_by")
+            _builder.set_prop("created_on", AAZObjectType, ".created_on")
+            _builder.set_prop("deleted", AAZBoolType, ".deleted")
+            _builder.set_prop("description", AAZStrType, ".description")
+            _builder.set_prop("display_name", AAZStrType, ".display_name")
             _builder.set_prop("indexer", AAZStrType, ".indexer")
             _builder.set_prop("name", AAZStrType, ".name")
             _builder.set_prop("object_id", AAZStrType, ".object_id")
             _builder.set_prop("settings", AAZDictType, ".settings")
             _builder.set_prop("type", AAZStrType, ".type")
+            _builder.set_prop("updated_by", AAZStrType, ".updated_by")
+            _builder.set_prop("updated_on", AAZObjectType, ".updated_on")
 
             configuration_references = _builder.get(".configuration_references")
             if configuration_references is not None:
